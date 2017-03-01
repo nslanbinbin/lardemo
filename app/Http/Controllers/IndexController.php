@@ -42,6 +42,14 @@ class IndexController extends Controller
         $price0 = $request->input('price0');
         $price1 = $request->input('price1');
 
+        if(!is_numeric($price0)){
+            return json_encode(array('msg'=>'价格最小位数必须为数字','sts'=>0));
+        }
+
+        if(!is_numeric($price1)){
+            return json_encode(array('msg'=>'价格最大为数必须为数字','sts'=>0));
+        }
+
         $page = 'http://www.3tempo.co.kr/product/list.html?cate_no=25&page=' . $p;
         //采集规则
         $rules = array(
@@ -100,6 +108,7 @@ class IndexController extends Controller
 
 
         $array = array();
+        $array['sts'] = 1;
         $array['list'] = $dataarr;
         echo json_encode($array);
     }

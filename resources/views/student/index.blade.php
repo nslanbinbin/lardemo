@@ -4,14 +4,14 @@
     <div class="col-sm-3 col-md-3">
         <div class="input-group input-group-lg">
             <span class="input-group-addon" id="sizing-addon1">价格位数大于:</span>
-            <input type="text" class="form-control" placeholder="5" aria-describedby="sizing-addon1" name="price0" id="price0">
+            <input type="text" class="form-control" placeholder="5" aria-describedby="sizing-addon1" name="price0" id="price0" value="5">
         </div>
     </div>
 
     <div class="col-sm-3 col-md-3">
         <div class="input-group input-group-lg">
             <span class="input-group-addon" id="sizing-addon2">价格位数小于:</span>
-            <input type="text" class="form-control" placeholder="7" aria-describedby="sizing-addon2" name="price1" id="price1">
+            <input type="text" class="form-control" placeholder="7" aria-describedby="sizing-addon2" name="price1" id="price1" value="7">
         </div>
     </div>
 
@@ -58,7 +58,7 @@
 <!-- Small modal -->
 <div class="modal fade bs-example-modal-sm" id="loading" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
+        <div class="modal-content" id="showmsg">
             数据加载中。。。
         </div>
     </div>
@@ -95,12 +95,28 @@
                         $('#loading').modal('show');
                     },
                     success: function (data) {
-                        $('.pagination>li').removeClass('active');
-                        $('#li'+p).addClass('active');
-                        $('#loading').modal('hide');
-                        $('#currp').val(p);
-                        vm.currpage = p;
-                        vm.items = data.list;
+                        if(data.sts ==1) {
+                            $('.pagination>li').removeClass('active');
+                            $('#li' + p).addClass('active');
+                            $('#loading').modal('hide');
+                            $('#currp').val(p);
+                            vm.currpage = p;
+                            vm.items = data.list;
+                        }else{
+                            $('#li' + p).addClass('active');
+                            $('#showmsg').html(data.msg);
+
+                            $('#currp').val(p);
+                            vm.items = [];
+
+                            setTimeout(function () {
+                                $('#loading').modal('hide');
+                                $('#showmsg').html('数据加载中。。。');
+                            }, 3000);
+
+
+
+                        }
                     }
                 });
             }
